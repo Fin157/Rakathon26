@@ -8,13 +8,11 @@ This is a 24-hour hackathon. A working end-to-end slice beats a polished partial
 
 - Scans live in `Other/`, which is git-ignored. Keep scans, reports, extracted text, model output on real cases and tokens out of git. Add a new data or output folder to `.gitignore` before the first write.
 - Send a scan or extracted text to an external model or service only when the user has said so in the current session. Local processing is fine.
-- Run Python that reads files from `Other/` with `-I`, and keep the scripts outside `Other/`.
 
 ## Extraction rules
 
 - Every proposed value carries evidence, either a quoted text span or an image crop with coordinates, and a basis of `explicit` or `inferred`. Missing findings get `absent`.
 - Show inferred suggestions apart from explicit findings, with their evidence and reasoning. A doctor confirms them before export.
-- A REDCap default is not evidence. Missing findings stay empty.
 - When text and drawing disagree, keep both values and raise an issue for the doctor. Neither source overwrites the other.
 - A drawing mark alone never creates a lesion. Unmatched marks become review issues.
 - The report text decides side (vpravo/vlevo, pravý/levý, P/L lalok). Mark position and handwritten P/L letters are supporting evidence, and any disagreement raises an issue. In axial views patient right is usually on the viewer's left. The coronal view is sometimes drawn mirrored.

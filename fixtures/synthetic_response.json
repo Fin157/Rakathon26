@@ -1,0 +1,348 @@
+{
+  "mode": "fixture",
+  "prompt_version": "report-extraction-v1",
+  "output_contract_version": "1.0.0",
+  "for_text_sha256": "3133b33324754e3e1710fda6311a51a225eb97bccd63765756334633ac4a8575",
+  "response": {
+    "source_text_sha256": "3133b33324754e3e1710fda6311a51a225eb97bccd63765756334633ac4a8575",
+    "evidence": [
+      {
+        "id": "e-specimen",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "Preparát: prostatektomie.",
+        "start_offset": 0,
+        "end_offset": 25
+      },
+      {
+        "id": "e-focus-a",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "Ložisko A je v levém laloku",
+        "start_offset": 26,
+        "end_offset": 53
+      },
+      {
+        "id": "e-size-a",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "rozměry 11 × 15 mm",
+        "start_offset": 55,
+        "end_offset": 73
+      },
+      {
+        "id": "e-gleason",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "Gleason 3+4=7",
+        "start_offset": 75,
+        "end_offset": 88
+      },
+      {
+        "id": "e-focus-b",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "Ložisko B je v pravém laloku",
+        "start_offset": 90,
+        "end_offset": 118
+      },
+      {
+        "id": "e-size-b",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "rozměr 7 mm",
+        "start_offset": 120,
+        "end_offset": 131
+      },
+      {
+        "id": "e-margin-negative",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "Na okraji není nádor.",
+        "start_offset": 133,
+        "end_offset": 154
+      },
+      {
+        "id": "e-classification",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "pT2c, L0, V0, R0",
+        "start_offset": 168,
+        "end_offset": 184
+      },
+      {
+        "id": "e-grade-group",
+        "text_layer_id": "tl-9cad32159aac464dd8df0be7",
+        "page": 1,
+        "quotation": "Grade Group 2",
+        "start_offset": 186,
+        "end_offset": 199
+      }
+    ],
+    "subjects": [
+      {
+        "id": "specimen-1",
+        "kind": "specimen",
+        "label": "Preparát: prostatektomie",
+        "identification_basis": "explicit",
+        "parent_id": null,
+        "evidence_ids": ["e-specimen"]
+      },
+      {
+        "id": "focus-a",
+        "kind": "tumour_focus",
+        "label": "Ložisko A",
+        "identification_basis": "explicit",
+        "parent_id": "specimen-1",
+        "evidence_ids": ["e-focus-a"]
+      },
+      {
+        "id": "focus-b",
+        "kind": "tumour_focus",
+        "label": "Ložisko B",
+        "identification_basis": "explicit",
+        "parent_id": "specimen-1",
+        "evidence_ids": ["e-focus-b"]
+      }
+    ],
+    "coverage": [
+      {
+        "id": "coverage-specimen-dimensions",
+        "subject_id": "specimen-1",
+        "property": "dimensions",
+        "checked": true,
+        "source_complete": true,
+        "rationale": "The complete synthetic report was checked; specimen dimensions are not stated."
+      }
+    ],
+    "observations": [
+      {
+        "id": "obs-focus-a-dimensions",
+        "subject_id": "focus-a",
+        "property": "dimensions",
+        "status": "recorded",
+        "basis": "normalized",
+        "value": {
+          "type": "dimensions",
+          "measurements": [
+            {"value": 11, "unit": "mm"},
+            {"value": 15, "unit": "mm"}
+          ],
+          "original_wording": "rozměry 11 × 15 mm"
+        },
+        "evidence_ids": ["e-size-a"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-focus-a-location",
+        "subject_id": "focus-a",
+        "property": "textual_location",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "location",
+          "description": "v levém laloku",
+          "original_wording": "Ložisko A je v levém laloku"
+        },
+        "evidence_ids": ["e-focus-a"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-focus-a-patterns",
+        "subject_id": "focus-a",
+        "property": "gleason_patterns",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "gleason_patterns",
+          "primary_pattern": 3,
+          "secondary_pattern": 4,
+          "original_wording": "Gleason 3+4=7"
+        },
+        "evidence_ids": ["e-gleason"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-focus-a-score",
+        "subject_id": "focus-a",
+        "property": "gleason_score",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "gleason_score",
+          "primary_pattern": 3,
+          "secondary_pattern": 4,
+          "total": 7,
+          "original_wording": "Gleason 3+4=7"
+        },
+        "evidence_ids": ["e-gleason"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-focus-b-dimensions",
+        "subject_id": "focus-b",
+        "property": "dimensions",
+        "status": "recorded",
+        "basis": "normalized",
+        "value": {
+          "type": "dimensions",
+          "measurements": [{"value": 7, "unit": "mm"}],
+          "original_wording": "rozměr 7 mm"
+        },
+        "evidence_ids": ["e-size-b"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-focus-b-location",
+        "subject_id": "focus-b",
+        "property": "textual_location",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "location",
+          "description": "v pravém laloku",
+          "original_wording": "Ložisko B je v pravém laloku"
+        },
+        "evidence_ids": ["e-focus-b"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-pt",
+        "subject_id": "specimen-1",
+        "property": "classification_pt",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "classification",
+          "original_code": "pT2c"
+        },
+        "evidence_ids": ["e-classification"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-l",
+        "subject_id": "specimen-1",
+        "property": "classification_l",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "classification",
+          "original_code": "L0"
+        },
+        "evidence_ids": ["e-classification"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-v",
+        "subject_id": "specimen-1",
+        "property": "classification_v",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "classification",
+          "original_code": "V0"
+        },
+        "evidence_ids": ["e-classification"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-r",
+        "subject_id": "specimen-1",
+        "property": "classification_r",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "classification",
+          "original_code": "R0"
+        },
+        "evidence_ids": ["e-classification"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-grade-group",
+        "subject_id": "specimen-1",
+        "property": "grade_group",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "coded",
+          "code": "2",
+          "original_wording": "Grade Group 2"
+        },
+        "evidence_ids": ["e-grade-group"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-explicit-negative",
+        "subject_id": "specimen-1",
+        "property": "presence",
+        "status": "recorded",
+        "basis": "explicit",
+        "value": {
+          "type": "presence",
+          "value": "absent",
+          "original_wording": "Na okraji není nádor."
+        },
+        "evidence_ids": ["e-margin-negative"],
+        "review_status": "unreviewed",
+        "certainty": {
+          "extraction": "unassessed",
+          "interpretation": "unassessed"
+        }
+      },
+      {
+        "id": "obs-specimen-dimensions-unreported",
+        "subject_id": "specimen-1",
+        "property": "dimensions",
+        "status": "not reported",
+        "basis": "explicit",
+        "unavailable_reason": "Confirmed by an explicit coverage check of the complete synthetic report."
+      }
+    ],
+    "issues": []
+  }
+}

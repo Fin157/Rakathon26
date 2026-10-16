@@ -5,3 +5,10 @@ __pycache__/
 *.egg-info/
 /Other/output/
 /Other/weak_labels.md
+/Other/slides-with-info.pptx
+/labels/
+/research/
+/.preprocess-private/
+/.preprocess-exports/
+/preprocess/.preprocess-private/
+/preprocess/.preprocess-exports/

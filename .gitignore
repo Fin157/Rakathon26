@@ -4,3 +4,7 @@
 __pycache__/
 /Other/output/
 /Other/weak_labels.md
+/.preprocess-private/
+/.preprocess-exports/
+/preprocess/.preprocess-private/
+/preprocess/.preprocess-exports/

@@ -2,5 +2,6 @@
 *.local.*
 .venv/
 __pycache__/
+*.egg-info/
 /Other/output/
 /Other/weak_labels.md

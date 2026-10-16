@@ -1,0 +1,9 @@
+[project]
+name = "prostapaper-preprocess"
+version = "0.1.0"
+description = "Local scan preprocessing and pseudonymization for ProstaPaper."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pillow>=12.3.0",
+]

@@ -1,1 +1,8 @@
 Other/
+.env
+*.local.*
+research/probe/out/
+labels/
+.venv/
+__pycache__/
+research/

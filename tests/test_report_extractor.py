@@ -581,6 +581,89 @@ class ValidationTests(unittest.TestCase):
         self.assertIn("Whole-payload corruption", result.errors[0])
         self.assertEqual(result.quarantine[0].item_type, "payload")
 
+    def test_late_subject_invalidation_quarantines_all_references(self) -> None:
+        layer = text_layer_for("Preparát. Ložisko A. Ložisko B.")
+        payload = base_payload(layer)
+        payload["subjects"][0], payload["subjects"][2] = (
+            payload["subjects"][2],
+            payload["subjects"][0],
+        )
+        payload["subjects"][2]["evidence_ids"] = ["missing-specimen-evidence"]
+        payload["coverage"] = [
+            {
+                "id": "coverage-focus-a",
+                "subject_id": "focus-a",
+                "property": "dimensions",
+                "checked": True,
+                "source_complete": True,
+                "rationale": "Coverage for the focus.",
+            }
+        ]
+        payload["issues"] = [
+            {
+                "id": "issue-focus-attribution",
+                "kind": "unresolved_attribution",
+                "summary": "The passage might describe either focus.",
+                "evidence_ids": ["e-focus-a"],
+                "alternative_subject_ids": ["focus-a", "focus-b"],
+            }
+        ]
+
+        result = validate_payload(payload, layer)
+        self.assertEqual(result.subjects, [])
+        self.assertEqual(result.coverage, [])
+        self.assertEqual(result.issues, [])
+        quarantine = {
+            (item.item_type, item.item_id): " ".join(item.reasons)
+            for item in result.quarantine
+        }
+        self.assertIn(
+            "depends on a missing or quarantined subject",
+            quarantine[("coverage", "coverage-focus-a")],
+        )
+        self.assertIn(
+            "depends on a missing or quarantined alternative subject",
+            quarantine[("issue", "issue-focus-attribution")],
+        )
+
+    def test_unpaired_surrogate_is_quarantined_and_serialized_safely(self) -> None:
+        layer = text_layer_for("Preparát. Ložisko A. Ložisko B.")
+        payload = base_payload(layer)
+        payload["coverage"] = [
+            {
+                "id": "invalid-unicode",
+                "subject_id": "specimen",
+                "property": "dimensions",
+                "checked": False,
+                "source_complete": False,
+                "rationale": "\ud800",
+            }
+        ]
+        fixture = {
+            "mode": "fixture",
+            "prompt_version": "report-extraction-v1",
+            "output_contract_version": "1.0.0",
+            "for_text_sha256": layer.text_sha256,
+            "response": payload,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            fixture_path = Path(directory) / "response.json"
+            fixture_path.write_text(json.dumps(fixture, ensure_ascii=True))
+            output = run_extraction(
+                layer, FixtureExtractor(fixture_path), Path(directory) / "out"
+            )
+            serialized = (output / "result.json").read_text(encoding="utf-8")
+            bundle = json.loads(serialized)
+            html_report = (output / "review.html").read_text(encoding="utf-8")
+        self.assertIn("\\ud800", serialized)
+        self.assertEqual(
+            bundle["quarantine"][0]["raw"]["rationale"], "\ud800"
+        )
+        self.assertIn("unpaired Unicode surrogate", " ".join(
+            bundle["quarantine"][0]["reasons"]
+        ))
+        self.assertIn("INCOMPLETE", html_report)
+
     def test_html_escapes_source_and_model_text(self) -> None:
         text = "Preparát. Ložisko A. Ložisko B. <script>alert('x')</script>"
         layer = text_layer_for(text)

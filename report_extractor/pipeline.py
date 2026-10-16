@@ -43,8 +43,31 @@ class ExtractionMetadata(BaseModel):
     issues: list[dict[str, Any]]
 
 
+def _has_surrogate(value: Any) -> bool:
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, str):
+            if any(0xD800 <= ord(character) <= 0xDFFF for character in item):
+                return True
+        elif isinstance(item, dict):
+            pending.extend(item.keys())
+            pending.extend(item.values())
+        elif isinstance(item, (list, tuple)):
+            pending.extend(item)
+    return False
+
+
 def _json_dump(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=False, indent=2, default=str) + "\n"
+    return (
+        json.dumps(
+            value,
+            ensure_ascii=_has_surrogate(value),
+            indent=2,
+            default=str,
+        )
+        + "\n"
+    )
 
 
 def run_extraction(

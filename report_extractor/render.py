@@ -12,7 +12,8 @@ from .validation import QuarantinedItem, ValidationResult
 
 def _escape(value: Any) -> str:
     if isinstance(value, (dict, list, tuple)):
-        value = json.dumps(value, ensure_ascii=False, indent=2, default=str)
+        value = json.dumps(value, ensure_ascii=True, indent=2, default=str)
+    value = str(value).encode("utf-8", errors="replace").decode("utf-8")
     return html.escape(str(value), quote=True)
 
 

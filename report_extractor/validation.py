@@ -51,6 +51,21 @@ def _identifier(raw: Any) -> str | None:
     return value if isinstance(value, str) else None
 
 
+def _contains_surrogate(value: Any) -> bool:
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, str):
+            if any(0xD800 <= ord(character) <= 0xDFFF for character in item):
+                return True
+        elif isinstance(item, dict):
+            pending.extend(item.keys())
+            pending.extend(item.values())
+        elif isinstance(item, list):
+            pending.extend(item)
+    return False
+
+
 def _cycle_nodes(graph: dict[str, str | None]) -> set[str]:
     cycles: set[str] = set()
     completed: set[str] = set()
@@ -165,6 +180,8 @@ def _validate_collection(
             _quarantine(result, item_type, raw, reasons + ["item must be a JSON object"])
             continue
         item_id = _identifier(raw)
+        if _contains_surrogate(raw):
+            reasons.append("item contains an unpaired Unicode surrogate")
         if item_id in duplicates:
             reasons.append(duplicates[item_id])
         if reasons:
@@ -200,6 +217,8 @@ def _validate_evidence(
         item_id = _identifier(raw)
         if item_id in duplicates:
             reasons.append(duplicates[item_id])
+        if _contains_surrogate(raw):
+            reasons.append("item contains an unpaired Unicode surrogate")
         try:
             evidence = Evidence.model_validate(raw)
         except ValidationError as exc:
@@ -447,6 +466,11 @@ def validate_payload(payload: Any, text_layer: TextLayer) -> ValidationResult:
         if not isinstance(raw, dict):
             _quarantine(result, "issue", raw, ["item must be a JSON object"])
             continue
+        if _contains_surrogate(raw):
+            _quarantine(
+                result, "issue", raw, ["item contains an unpaired Unicode surrogate"]
+            )
+            continue
         try:
             issue = ExtractionIssue.model_validate(raw)
         except ValidationError as exc:
@@ -507,6 +531,37 @@ def validate_payload(payload: Any, text_layer: TextLayer) -> ValidationResult:
                         observation.model_dump(mode="json"),
                     ),
                     ["depends on a missing or quarantined subject"],
+                )
+        for check in list(result.coverage):
+            if check.subject_id in invalid_subject_ids:
+                result.coverage.remove(check)
+                _quarantine(
+                    result,
+                    "coverage",
+                    next(
+                        (
+                            raw
+                            for raw in coverage_raw
+                            if _identifier(raw) == check.id
+                        ),
+                        check.model_dump(mode="json"),
+                    ),
+                    ["depends on a missing or quarantined subject"],
+                )
+        for issue in list(result.issues):
+            if any(
+                subject_id in invalid_subject_ids
+                for subject_id in issue.alternative_subject_ids
+            ):
+                result.issues.remove(issue)
+                _quarantine(
+                    result,
+                    "issue",
+                    next(
+                        (raw for raw in issues_raw if _identifier(raw) == issue.id),
+                        issue.model_dump(mode="json"),
+                    ),
+                    ["depends on a missing or quarantined alternative subject"],
                 )
 
     return result

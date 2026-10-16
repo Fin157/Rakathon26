@@ -1,8 +1,6 @@
-# Other/
 .env
 *.local.*
-research/probe/out/
-labels/
 .venv/
 __pycache__/
-research/
+/Other/output/
+/Other/weak_labels.md
